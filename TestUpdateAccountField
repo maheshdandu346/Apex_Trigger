@@ -1,0 +1,28 @@
+@isTest
+private class TestUpdateAccountField {
+    static testMethod void tsAccount(){
+        List<Account> lac = new List<account>();
+        set<Id> setids =new set<Id>();
+        Map<Id,Opportunity> mapOpp =new Map<Id,Opportunity>();
+opportunity opp = new opportunity();
+opp.name='test opp';
+opp.stagename='closed won';
+        opp.Amount=23000;
+        opp.CloseDate=Date.newInstance(2008,11,20);
+        opp.Name = 'updating Account field to true';
+        opp.AccountId = opp.ID;
+        test.startTest();
+        insert opp;
+         test.stopTest();
+        for( Account acc :[select id,isgold__c from Account Where Id IN :setids]){
+            if(mapOpp.get(opp.Id).Amount  > 20000)
+        {
+      acc.isgold__c= TRUE;
+      }
+       else
+       {
+     acc.isgold__c= FALSE;
+       }
+         }
+        }
+      }
