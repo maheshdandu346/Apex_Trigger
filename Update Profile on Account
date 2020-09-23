@@ -1,0 +1,16 @@
+trigger Update_Profile on Account (after update)
+ {
+
+
+        List<Contact> con = [select AccountId, FirstName, LastName, Profile__c, Account.Website from Contact where AccountId in (select Id from Account where Website != null)];
+
+
+        for(Contact c:con)
+{
+                for(Account acc:[select Website from Account where Id =: c.AccountId])
+{
+                c.Profile__c = acc.Website+ '/'+c.FirstName.substring(1,1)+c.LastName;
+                update c;
+                }
+        }
+}
