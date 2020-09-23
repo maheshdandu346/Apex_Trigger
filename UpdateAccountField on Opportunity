@@ -1,0 +1,32 @@
+trigger UpdateAccountField on Opportunity(after insert,after update)
+{
+ List<Account> lac = new List<account>();
+ set<Id> setids =new set<Id>();
+ Map<Id,Opportunity> mapOpp =new Map<Id,Opportunity>();
+ if(Trigger.isInsert || Trigger.isUpdate && Trigger.isAfter)
+ {
+   for(Opportunity obj : Trigger.new)
+    {
+setids.add(obj.AccountId);
+     }
+   for(Opportunity obj : Trigger.new)
+    {
+mapOpp.put(obj.AccountId,obj);
+     }
+   for(Account obj :[select id,isgold__c from Account Where Id IN :setids])
+   {
+if(mapOpp.get(obj.Id).Amount  > 20000)
+{
+obj.isgold__c= TRUE;
+lac.add(obj);
+}
+else
+{
+obj.isgold__c= FALSE;
+lac.add(obj);
+}
+}
+if(lac.size() >0)
+upsert lac;
+}
+}
