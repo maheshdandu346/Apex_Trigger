@@ -1,0 +1,39 @@
+trigger smith on Account (after insert,after update)
+{
+   List<Contact> ls = new List<Contact>();
+    Contact cont = new Contact();
+    if(trigger.isAfter && trigger.isInsert)
+  {
+   for(Account acc:trigger.new)
+   {
+     cont.AccountId= acc.Id;
+     cont.FirstName='Info';
+     cont.LastName='Default';
+     cont.Email='info@websitedomain.tld';
+     
+     ls.add(cont);    
+   }
+  }
+   if(!ls.isEmpty())
+   {
+      insert ls;
+   
+   }
+   if(trigger.isBefore && trigger.isUpdate)
+   {
+   List<Account> lsa = [Select Only_Default_Contact__c from Account];
+   for(Account a: trigger.new)
+     {
+      if(ls.size()==1)
+        {
+        a.Only_Default_Contact__c = TRUE;
+        update a;
+        }
+        else
+        {
+          a.Only_Default_Contact__c = FALSE;
+          update a;
+        }
+   }
+   }
+}
