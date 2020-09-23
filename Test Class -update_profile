@@ -1,0 +1,20 @@
+@isTest
+public class update_profile 
+{
+	public static void updateProfile(List<Account> accList)
+	{
+		List<contact> conList = new List<contact>();
+	for(Account acc:accList)
+	{
+			for(Contact con:[select FirstName, LastName from contact where AccountId=: acc.Id])
+		{
+			if(acc.website != null)
+			{
+			con.Profile__c = acc.Website +'/'+con.FirstNmae.substring(0,1)+con.Lastname;
+			conList.add(con);
+			}
+		}
+	}
+	update conList;
+	}
+}
