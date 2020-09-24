@@ -1,0 +1,34 @@
+@isTest
+public class testsmith {
+public static void newContactCreated(List<Account> accList){
+List<Contact> conList = new List<Contact>();
+for(Account acc : accList) {
+ Contact con = new Contact(AccountId = acc.Id);
+ List<String> nameStr = acc.Name.split(' ');
+ if(nameStr.size()>0)
+con.LastName = nameStr[0];
+ if(nameStr.size()>1)
+ con.FirstName = nameStr[1];
+ 
+con.Email = 'info@websitedomain.tld';
+acc.Only_Default_Contact__c = TRUE;
+conList.add(con);
+
+}
+insert conList;
+}
+public static void updateCheckboxOnAccount(List<Contact> contactList){
+Set<Id> accountIds = new Set<Id>();
+for(Contact con : contactList) {
+accountIds.add(con.AccountId);
+}
+
+List<Account> updatedAccounts = new List<Account>();
+for(AggregateResult ar : [select count(id) , AccountId from Contact where AccountId IN :accountIds group by AccountId having count(id)  >1 ]){
+updatedAccounts.add(new Account(Id = (Id)ar.get('AccountId'), Only_Default_Contact__c=false));    
+}
+
+if(!updatedAccounts.isEmpty())
+update updatedAccounts;
+}
+}
